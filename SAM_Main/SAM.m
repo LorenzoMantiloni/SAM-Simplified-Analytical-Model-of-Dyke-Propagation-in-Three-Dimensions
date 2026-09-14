@@ -57,7 +57,8 @@ function[dyke_path_tip,dyke_path_dip,dyke_path_strike,varargout] = ...
 %  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 
 %  I appreciate any feedback or bug report. Reach out to me at 
-%  lorenzo@gfz-potsdam.de
+%  l.mantiloni@exeter.ac.uk
+%  l.mantiloni92@hotmail.it
 %
 %  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -72,17 +73,30 @@ end
 
 %  Create "TopoInterp"
 if ~isa(TopoInterp,'scatteredInterpolant')
-    if isscalar(TopoInterp)
+    if isscalar(TopoInterp) && ~isstruct(TopoInterp)
         TopoInterp = CreateTopoInterp(1,StartPoints);
     else
-        if ~isfield(TopoInterp,'Xsurf') || ~isfield(TopoInterp,'Ysurf') ...
-                || ~isfield(TopoInterp,'Zsurf')
-            error(['Please provide x,y,z grids of points describing '...
-                'the topography (see "Example2.m"). For a simple '...
-                'flat surface, set TopoInterp = 0 (or any scalar).'])
+        if ~isfield(TopoInterp,'Points') || ~isfield(TopoInterp,'Elevation')
+            error(['Please provide a Nx2 array of x,y coordinates of ...'
+                'points describing the topography, and a Nx1 array ...' 
+                'describing their elevation (see Example2.m). ...' ...
+                'Alternatively, provide a scatteredInterpolant as done in ...' 
+                'Example3.m. For a simple flat surface, set TopoInterp = 0 ...' 
+                '(or any scalar).'])
         else
-            Xsurf = TopInterp.Xsurf;
-            TopoInterp = CreateTopoInterp(0,Xsurf,Ysurf,Zsurf);
+            Xsurf = TopoInterp.Points(:,1); Ysurf = TopoInterp.Points(:,2);
+            Zsurf = TopoInterp.Elevation;
+            if ~isfield(TopoInterp,'Method')
+                Method = 'linear';
+            else 
+                Method = TopoInterp.Method;
+            end
+            if ~isfield(TopoInterp,'ExtrapolationMethod')
+                ExtrapolationMethod = 'linear';
+            else
+                ExtrapolationMethod = TopoInterp.ExtrapolationMethod;
+            end
+            TopoInterp = CreateTopoInterp(0,Xsurf,Ysurf,Zsurf,Method,ExtrapolationMethod);
         end
     end
 end
@@ -576,16 +590,19 @@ if Flat
     Ysurf = Xsurf;
     [Xsurf,Ysurf] = meshgrid(Xsurf,Ysurf);
     Zsurf = Xsurf*0;
+    Method = 'linear'; ExtrapolationMethod = 'linear';
 
 else
 
     Xsurf = varargin{1};
     Ysurf = varargin{2};
     Zsurf = varargin{3};
+    Method = varargin{4};
+    ExtrapolationMethod = varargin{5};
 
 end
 
-TopoInterp = scatteredInterpolant(Xsurf(:),Ysurf(:),Zsurf(:));
+TopoInterp = scatteredInterpolant(Xsurf(:),Ysurf(:),Zsurf(:),Method,ExtrapolationMethod);
 
 end
 
