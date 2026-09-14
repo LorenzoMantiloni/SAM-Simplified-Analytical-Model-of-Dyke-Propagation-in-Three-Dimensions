@@ -296,7 +296,7 @@ if ToFreeSurface && numel(dike_path_strike) > 1
     F = dike_path_tip(end,:);
     theta = dike_path_dip(end-1);
     al = dike_path_strike(end-1);
-    while F(3) < TopoInterp(F(1),F(2)) && F(3) > -2*MDT 
+    while F(3) < TopoInterp(F(1),F(2)) && F(3) > -3*MDT 
         F(1) = F(1) - PathStep*cos(theta)*cos(al);
         F(2) = F(2) - PathStep*cos(theta)*sin(al);
         F(3) = F(3) + PathStep*sin(theta);

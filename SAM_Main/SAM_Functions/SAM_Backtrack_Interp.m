@@ -471,7 +471,8 @@ for k=1:3
 
 end
 
-condAboveMDT = Candidates(:,3) > -MDT;
+condAboveMDT = Candidates(:,3) > TopoInterp(Candidates(:,1), ...
+    Candidates(:,2))-MDT;
 Candidates = Candidates(~condAboveMDT,:);
 Bc_best = find(Candidates(:,4) == min(Candidates(:,4)));
 Bc = Candidates(Bc_best,1:3);
