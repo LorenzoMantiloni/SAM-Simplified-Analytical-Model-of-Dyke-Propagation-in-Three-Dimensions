@@ -15,7 +15,8 @@
 %  to the free surface are shown as by blue dots. 
 % 
 %  I appreciate any feedback or bug report. Reach out to me at 
-%  lorenzo@gfz-potsdam.de
+%  l.mantiloni@exeter.ac.uk
+%  l.mantiloni92@hotmail.it
 %
 %  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 

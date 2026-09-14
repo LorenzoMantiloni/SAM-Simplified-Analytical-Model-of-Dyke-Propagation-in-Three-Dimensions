@@ -10,7 +10,8 @@
 %  dots, and the points where they stop are also marked by blue dots.
 % 
 %  I appreciate any feedback or bug report. Reach out to me at 
-%  lorenzo@gfz-potsdam.de
+%  l.mantiloni@exeter.ac.uk
+%  l.mantiloni92@hotmail.it
 %
 %  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
@@ -35,6 +36,12 @@ Depth = 3e3;
 P = -Pr*g*Depth;
 Radius = 1e3;
 
+% Coefficients of horizontal stress components if background stress state
+% is different from isotropic. Sxx is assumed to be the most compressive
+% component, so Sxx = SH*Pr*g*z. Here the stress is assumed isotropic.
+SH = 1; % Most compressive horizontal stress
+Sh = 1; % Least compressive horizontal stress
+
 %  Number of point forces
 Npf = 200;
 
@@ -58,7 +65,7 @@ StartZ = StartX*0 - 6e3;
 StartPoints = [StartX' StartY' StartZ'];
 c = 800;
 n = 12;
-Pm = 2200; %Magma density
+Pm = 2300; %Magma density
 
 %  Setting Direction
 Direction = 'F';
@@ -66,7 +73,7 @@ Direction = 'F';
 %  Setting StressModel
 StressModel.StressOption = 'Analytical';
 StressModel.Stressfun = @HalfSpaceNormalForce;
-StressModel.Stressfun_Par = {P,Pr,nu,Xloc,Yloc}; 
+StressModel.Stressfun_Par = {P,Pr,nu,Xloc,Yloc,SH,Sh}; 
 
 %  Setting plotting and propagation/arrest options
 display = 1; %Display SAM pathway

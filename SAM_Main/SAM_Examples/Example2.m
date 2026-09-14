@@ -14,7 +14,8 @@
 %  respectively.The points where they stop are also marked by blue dots.
 % 
 %  I appreciate any feedback or bug report. Reach out to me at 
-%  lorenzo@gfz-potsdam.de
+%  l.mantiloni@exeter.ac.uk
+%  l.mantiloni92@hotmail.it
 %
 %  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 
@@ -36,8 +37,8 @@ load 'Example2_Data.mat'
 %  _ Sxx, Sxy, Sxz, Syy, Syz, Szz: components of the Cartesian stress
 %    tensor evaluated at each observation point
 %  _ TectS: Sxx, Syy, Sxy components of tectonic stress
-%  _ Topo_Interp: interpolating function for the topography giving the
-%    height of free surface at point (x, y)
+%  _ Topo_Interp: structure including x, y coordinates of points describing 
+%    the topography and the elevation of each point. 
 
 %  Host rock parameters
 Pr = 2850; %Host rock density (kg/m^3)
@@ -83,10 +84,16 @@ options.adjustdir = 1;
 PathStep = 60;
 options.ProjectToFreeSurface = [1,PathStep]; 
 
+%  Setting TopoInterp
+Topo_Interp.Points = Points(:,2:3); %x-y coordinates of mesh nodes
+Topo_Interp.Elevation = Points(:,4); %Elevation of mesh nodes
+
 %  Plotting the boundary-element mesh representing the topography
 figure
-trisurf(Triangles,Points(:,2),Points(:,3),Points(:,4)*5,'FaceAlpha',...
-    (.2),'FaceColor', [0.5 0 0.9 ]);
+ElevationScale = 5; %Vertical exaggeration coefficient for better 
+                    %topography visualization
+trisurf(Triangles,Points(:,2),Points(:,3),Points(:,4)*ElevationScale, ...
+    'FaceAlpha',(.2),'FaceColor', [0.5 0 0.9 ]);
 xlabel('x (m)'); ylabel('y (m)'); zlabel('z (m)'); axis equal
 hold on
 
@@ -168,8 +175,8 @@ nu = 0.25; % Poisson's ratio
 Direction = 'F';
 
 figure
-trisurf(Triangles,Points(:,2),Points(:,3),Points(:,4)*5,'FaceAlpha',...
-    (.2),'FaceColor', [0.5 0 0.9 ]);
+trisurf(Triangles,Points(:,2),Points(:,3),Points(:,4)*ElevationScale,...
+    'FaceAlpha',(.2),'FaceColor', [0.5 0 0.9 ]);
 xlabel('x (m)'); ylabel('y (m)'); zlabel('z (m)'); axis equal
 hold on
 
